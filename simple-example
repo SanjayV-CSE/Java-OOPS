@@ -17,3 +17,195 @@ public class Main {
         car1.displayDetails();
     }
 }
+
+//Inheritance program - 1
+class Vehicle {
+    void start() {
+        System.out.println("Vehicle started");
+    }
+
+    void stop() {
+        System.out.println("Vehicle stopped");
+    }
+}
+
+class Car extends Vehicle {
+    void drive() {
+        System.out.println("Car is being driven");
+    }
+}
+
+class Bike extends Vehicle {
+    void ride() {
+        System.out.println("Bike is being ridden");
+    }
+}
+
+public class Inheritanceprogram {
+    public static void main(String[] args) {
+        Car car = new Car();
+        car.start(); 
+        car.drive();
+        car.stop(); 
+
+        System.out.println();
+        Bike bike = new Bike();
+        bike.start();  
+        bike.ride(); 
+        bike.stop();
+    }
+}
+
+//Inheritance program - 2
+
+abstract class BankAccount {
+    protected String accountHolderName;
+    protected double balance;
+
+    public BankAccount(String accountHolderName, double balance) {
+        this.accountHolderName = accountHolderName;
+        this.balance = balance;
+    }
+
+    abstract void calculateInterest();
+
+    void deposit(double amount) {
+        balance += amount;
+        System.out.println("Deposited: " + amount + ". New balance: " + balance);
+    }
+    void withdraw(double amount) {
+        if (amount > balance) {
+            System.out.println("Insufficient balance for withdrawal!");
+        } else {
+            balance -= amount;
+            System.out.println("Withdrew: " + amount + ". New balance: " + balance);
+        }
+    }
+}
+class SavingsAccount extends BankAccount {
+    private static final double INTEREST_RATE = 0.04;
+
+    public SavingsAccount(String accountHolderName, double balance) {
+        super(accountHolderName, balance);
+    }
+    void calculateInterest() {
+        double interest = balance * INTEREST_RATE;
+        balance += interest;
+        System.out.println("Interest added to Savings Account: " + interest + ". New balance: " + balance);
+    }
+}
+
+
+class CurrentAccount extends BankAccount {
+    private static final double OVERDRAFT_LIMIT = 5000;
+
+    public CurrentAccount(String accountHolderName, double balance) {
+        super(accountHolderName, balance);
+    }
+
+    void calculateInterest() {
+        System.out.println("No interest is calculated for Current Accounts.");
+    }
+
+    void withdraw(double amount) {
+        if (amount > balance + OVERDRAFT_LIMIT) {
+            System.out.println("Overdraft limit exceeded!");
+        } else {
+            balance -= amount;
+            System.out.println("Withdrew: " + amount + ". New balance: " + balance);
+        }
+    }
+}
+
+public class BankingSystem {
+    public static void main(String[] args) {
+        System.out.println("Savings Account Ex");
+        BankAccount savings = new SavingsAccount("Alice", 10000);
+        savings.deposit(2000);
+        savings.calculateInterest();
+        savings.withdraw(5000);
+
+        System.out.println("Current Account Ex");
+        BankAccount current = new CurrentAccount("Bob", 2000);
+        current.deposit(3000);
+        current.calculateInterest();
+        current.withdraw(8000);
+        current.withdraw(2000);
+    }
+}
+
+//Polymorphism program
+class Shape {
+    void draw() {
+        System.out.println("Drawing a generic shape.");
+    }
+
+    double calculateArea(double dimension) {
+        return 0; // Generic shape has no area calculation
+    }
+}
+
+class Circle extends Shape {
+    private static final double PI = 3.14159;
+
+    @Override
+    void draw() {
+        System.out.println("Drawing a circle.");
+    }
+
+    @Override
+    double calculateArea(double radius) {
+        return PI * radius * radius;
+    }
+}
+
+class Rectangle extends Shape {
+    @Override
+    void draw() {
+        System.out.println("Drawing a rectangle.");
+    }
+
+    double calculateArea(double length, double width) {
+        return length * width;
+    }
+}
+
+class Triangle extends Shape {
+    @Override
+    void draw() {
+        System.out.println("Drawing a triangle.");
+    }
+
+    @Override
+    double calculateArea(double base) {
+        System.out.println("For a triangle, pass base and height to calculate area.");
+        return 0;
+    }
+
+    double calculateArea(double base, double height) {
+        return 0.5 * base * height;
+    }
+}
+
+public class PolymorphismExample {
+    public static void main(String[] args) {
+        Shape myShape;
+
+        System.out.println("Circle Example");
+        myShape = new Circle();
+        myShape.draw();
+        System.out.println("Area of Circle: " + myShape.calculateArea(5));
+
+        System.out.println("Rectangle Example");
+        myShape = new Rectangle();
+        myShape.draw();
+        Rectangle myRectangle = (Rectangle) myShape;
+        System.out.println("Area of Rectangle: " + myRectangle.calculateArea(4, 6));
+
+        System.out.println("Triangle Example");
+        myShape = new Triangle();
+        myShape.draw();
+        Triangle myTriangle = (Triangle) myShape;
+        System.out.println("Area of Triangle: " + myTriangle.calculateArea(5, 8));
+    }
+}
